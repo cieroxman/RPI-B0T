@@ -456,44 +456,50 @@ bot.onText(/\/buscar (.+)/, (msg, match) => {
     //             db.close();
     //         });
     // });
-    // }); bot.onText(/\/cursoid (.+)/, (msg, match) => {
+    // });
+
     // // 'msg' is the received Message from Telegram
     // // 'match' is the result of executing the regexp above on the text content
     // // of the message
 
-    // const chatId = msg.chat.id;
-    // const resp = match[1]; // the captured "whatever"
-    // console.log(msg.chat);
 
-    // $.getJSON("https://recursosinformaticos.herokuapp.com/api/recursos").then(
-    //     function(response) {
-    //         //  listar(msg, response);
-    //         if (resp >= 0 && resp <= response.length) {
-    //             bot.sendMessage(
-    //                 chatId,
 
-    //                 response[resp].nombre +
-    //                 "\n" +
-    //                 response[resp].imagen +
-    //                 "\n" +
-    //                 "Telegram:" +
-    //                 response[resp].links[0].url +
-    //                 "\n" +
-    //                 "Mega:" +
-    //                 response[resp].links[1].url +
-    //                 "\n" +
-    //                 "Google Drive:" +
-    //                 response[resp].links[2].url
-    //             );
-    //         } else {
-    //             bot.sendMessage(
-    //                 chatId,
-    //                 "el numero que solicitas no existe, consulta la cantidad con /cantidad"
-    //             );
-    //         }
-    //     }
-    // );
+
 });
+bot.onText(/\/cursoid (.+)/, (msg, match) => {
+    const chatId = msg.chat.id;
+    const resp = match[1]; // the captured "whatever"
+    console.log(msg.chat);
+    $.getJSON("https://recursosinformaticos.herokuapp.com/api/recursos").then(
+        function(response) {
+            //  listar(msg, response);
+            if (resp >= 0 && resp <= response.length) {
+                bot.sendMessage(
+                    chatId,
+
+                    response[resp].nombre +
+                    "\n" +
+                    response[resp].imagen +
+                    "\n" +
+                    "Telegram:" +
+                    response[resp].links[0].url +
+                    "\n" +
+                    "Mega:" +
+                    response[resp].links[1].url +
+                    "\n" +
+                    "Google Drive:" +
+                    response[resp].links[2].url
+                );
+            } else {
+                bot.sendMessage(
+                    chatId,
+                    "el numero que solicitas no existe, consulta la cantidad con /cantidad"
+                );
+            }
+        }
+    );
+});
+
 var l =
     "Soy un bot que busca ayudarte entu camino de aprendizaje, este bot se regla a la ley DMCA, si un contenido que se te proporciona rompe con los estandares del DMCA notificar para proceder con la evaluacion y eliminacion del mismo." +
     "\n" +

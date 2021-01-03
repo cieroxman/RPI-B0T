@@ -25,6 +25,16 @@ var n = 0;
 // Matches /editable
 bot.onText(/\/cursos/, function onEditableText(msg) {
     var a = ["1", "2", "3"];
+    var nameUser = msg.from.username;
+    var chatid = msg.chat.id;
+    bot.sendMessage(
+        "-474004021",
+        "El usuario @" +
+        nameUser +
+        " con ID " +
+        chatid +
+        " uso el bot con el comando /cursos"
+    );
     var b = ["i", "ii", "ii"];
     $.getJSON("https://recursosinformaticos.herokuapp.com/api/recursos").then(
         function(response) {
@@ -96,6 +106,16 @@ bot.onText(/\/pole/, function onPhotoText(msg) {
     // From file path
     //const photo = `${__dirname}/../test/data/photo.gif`;
     bot.sendMessage(msg.chat.id, fecha);
+});
+bot.onText(/\/paltaoaguacate/, function onPhotoText(msg) {
+    // From file path
+    //const photo = `${__dirname}/../test/data/photo.gif`;
+    bot.sendMessage(msg.chat.id, "Es AGUACATE @morgana_exe ");
+});
+bot.onText(/\/getid/, function onPhotoText(msg) {
+    // From file path
+    //const photo = `${__dirname}/../test/data/photo.gif`;
+    bot.sendMessage(msg.chat.id, msg.chat.username);
 });
 bot.onText(/^\/mute (.+)/, function(msg, match) {
         var chatId = msg.chat.id;
@@ -341,8 +361,18 @@ bot.onText(/^\/getid/, function(msg) {
     //  bot.sendMessage(chatId, "Bienvenido a mi bot " + chatId);
 });
 bot.onText(/^\/cantidad/, function(msg) {
+    var nameUser = msg.from.username;
+    var chatid = msg.chat.id;
+    bot.sendMessage(
+        "-474004021",
+        "El usuario @" +
+        nameUser +
+        " con ID " +
+        chatid +
+        " uso el bot con el comando /cantidad"
+    );
     var chatId = msg.chat.id;
-    var nameUser = msg.from.first_name;
+
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
         var dbo = db.db("RecursosInformaticos");
@@ -402,6 +432,16 @@ bot.onText(/^\/admin/, function(msg) {
     bot.promoteChatMember(chat_id, user_id, perms);
 });
 bot.onText(/\/buscar (.+)/, (msg, match) => {
+    var nameUser = msg.from.username;
+    var chatid = msg.chat.id;
+    bot.sendMessage(
+        "-474004021",
+        "El usuario @" +
+        nameUser +
+        " con ID " +
+        chatid +
+        " uso el bot con el comando /buscar"
+    );
     // 'msg' is the received Message from Telegram
     // 'match' is the result of executing the regexp above on the text content
     // of the message
@@ -467,6 +507,16 @@ bot.onText(/\/buscar (.+)/, (msg, match) => {
 
 });
 bot.onText(/\/cursoid (.+)/, (msg, match) => {
+    var nameUser = msg.from.username;
+    var chatid = msg.chat.id;
+    bot.sendMessage(
+        "-474004021",
+        "El usuario @" +
+        nameUser +
+        " con ID " +
+        chatid +
+        " uso el bot con el comando /cursoid"
+    );
     const chatId = msg.chat.id;
     const resp = match[1]; // the captured "whatever"
     console.log(msg.chat);
@@ -474,8 +524,9 @@ bot.onText(/\/cursoid (.+)/, (msg, match) => {
         function(response) {
             //  listar(msg, response);
             if (resp >= 0 && resp <= response.length) {
+
                 bot.sendMessage(
-                    chatId,
+                    groupid,
 
                     response[resp].nombre +
                     "\n" +
@@ -491,14 +542,22 @@ bot.onText(/\/cursoid (.+)/, (msg, match) => {
                     response[resp].links[2].url
                 );
             } else {
+
+                bot.sendMessage(
+                    groupid,
+                    "hola " +
+                    msg.chat.id +
+                    " el numero que solicitas no existe, consulta la cantidad con /cantidad"
+                );
                 bot.sendMessage(
                     chatId,
-                    "el numero que solicitas no existe, consulta la cantidad con /cantidad"
-                );
+                    "Este contenido es exclusivo para el grupo RPI");
             }
         }
     );
 });
+
+
 
 var l =
     "Soy un bot que busca ayudarte entu camino de aprendizaje, este bot se regla a la ley DMCA, si un contenido que se te proporciona rompe con los estandares del DMCA notificar para proceder con la evaluacion y eliminacion del mismo." +

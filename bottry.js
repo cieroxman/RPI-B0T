@@ -470,11 +470,11 @@ bot.onText(/\/buscar (.+)/, (msg, match) => {
     const resp = match[1]; // the captured "whatever"
     $.getJSON("https://recursosinformaticos.herokuapp.com/api/recursos").then(
         function(response) {
-            for (let index = 0; index < response.length; index++) {
+            for (let index = 0; index <= response.length - 1; index++) {
                 //   const element = array[index];
                 if (response[index].nombre.toUpperCase().includes(resp.toUpperCase())) {
                     f.push(response[index]);
-                    console.log(response[index].nombre);
+                    // console.log(response[index].nombre);
                 }
             }
             // const getrecursos = response.find(curso => curso.nombre == "Git");
@@ -537,7 +537,7 @@ bot.onText(/\/cursoid (.+)/, (msg, match) => {
     );
     const chatId = msg.chat.id;
     const resp = match[1]; // the captured "whatever"
-    console.log(msg.chat);
+    //console.log(msg.chat);
     $.getJSON("https://recursosinformaticos.herokuapp.com/api/recursos").then(
         function(response) {
             //  listar(msg, response);

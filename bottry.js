@@ -470,7 +470,7 @@ bot.onText(/\/buscar (.+)/, (msg, match) => {
     const resp = match[1]; // the captured "whatever"
     $.getJSON("https://recursosinformaticos.herokuapp.com/api/recursos").then(
         function(response) {
-            for (let index = 0; index <= response.length - 1; index++) {
+            for (let index = 0; index <= response.length - 2; index++) {
                 //   const element = array[index];
                 if (response[index].nombre.toUpperCase().includes(resp.toUpperCase())) {
                     f.push(response[index]);

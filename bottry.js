@@ -1,5 +1,5 @@
 //"-436098559"
-const groupid = "-1001386454830"
+const groupid = "-1001386454830";
 const TelegramBot = require("node-telegram-bot-api");
 const token = "1482047845:AAHUxw4Xt1SjwXdTv5hp4_0lMCArAkrHuOY";
 const bot = new TelegramBot(token, { polling: true });
@@ -10,7 +10,7 @@ const { document } = new JSDOM("").window;
 global.document = document;
 var MongoClient = require("mongodb").MongoClient;
 var url =
-    "mongodb+srv://admin:superadmin@cluster0.av7ui.mongodb.net/RecursosInformaticos?retryWrites=true&w=majority";;
+    "mongodb+srv://admin:superadmin@cluster0.av7ui.mongodb.net/RecursosInformaticos?retryWrites=true&w=majority";
 var $ = (jQuery = require("jquery")(window));
 bot.on("polling_error", function(error) {
     console.log(error);
@@ -118,66 +118,88 @@ bot.onText(/\/getid/, function onPhotoText(msg) {
     bot.sendMessage(msg.chat.id, msg.chat.username);
 });
 bot.onText(/^\/mute (.+)/, function(msg, match) {
-        var chatId = msg.chat.id;
-        var fromId = msg.from.id;
-        var replyId = msg.reply_to_message.from.id;
-        var replyName = msg.reply_to_message.from.first_name;
-        var fromName = msg.from.first_name;
+    var chatId = msg.chat.id;
+    var fromId = msg.from.id;
+    var replyId = msg.reply_to_message.from.id;
+    var replyName = msg.reply_to_message.from.first_name;
+    var fromName = msg.from.first_name;
 
-        // Recogerá en el comando el tiempo de baneo
-        var tiempo = match[1];
+    // Recogerá en el comando el tiempo de baneo
+    var tiempo = match[1];
 
-        // Nos permitirá manejar el tiempo
-        var ms = require('ms')
+    // Nos permitirá manejar el tiempo
+    var ms = require("ms");
 
-        // Se encargará de manejar los privilegios que el usuario tendrá restringidos.
-        const perms = {};
-        perms.can_send_message = false;
-        perms.can_send_media_messages = false;
-        perms.can_send_other_messages = false;
-        perms.can_can_add_web_page_previews = false;
+    // Se encargará de manejar los privilegios que el usuario tendrá restringidos.
+    const perms = {};
+    perms.can_send_message = false;
+    perms.can_send_media_messages = false;
+    perms.can_send_other_messages = false;
+    perms.can_can_add_web_page_previews = false;
 
-        if (msg.reply_to_message == undefined) {
-            return;
+    if (msg.reply_to_message == undefined) {
+        return;
+    }
+
+    bot.getChatMember(chatId, fromId).then(function(data) {
+        if (data.status == "creator" || data.status == "administrator") {
+            bot
+                .restrictChatMember(
+                    chatId,
+                    replyId, { until_date: Math.round(Date.now() + ms(tiempo + "days") / 1000) },
+                    perms
+                )
+                .then(function(result) {
+                    bot.sendMessage(
+                        chatId,
+                        "El usuario " +
+                        replyName +
+                        " ha sido muteado durante " +
+                        tiempo +
+                        " días"
+                    );
+                }); // restrictChatMember
+        } else {
+            bot.sendMessage(
+                chatId,
+                "Lo siento " + fromName + " no eres administrador"
+            );
         }
-
-        bot.getChatMember(chatId, fromId).then(function(data) {
-                if ((data.status == 'creator') || (data.status == 'administrator')) {
-                    bot.restrictChatMember(chatId, replyId, { until_date: Math.round((Date.now() + ms(tiempo + "days") / 1000)) }, perms).then(function(result) {
-                            bot.sendMessage(chatId, "El usuario " + replyName + " ha sido muteado durante " + tiempo + " días");
-                        }) // restrictChatMember
-                } else {
-                    bot.sendMessage(chatId, "Lo siento " + fromName + " no eres administrador");
-                }
-            }) // getChatMember
-    }) // Comando
+    }); // getChatMember
+}); // Comando
 bot.onText(/^\/unmute/, function(msg) {
-        var chatId = msg.chat.id;
-        var fromId = msg.from.id;
-        var fromName = msg.from.first_name;
-        var replyName = msg.reply_to_message.from.first_name;
-        var replyId = msg.reply_to_message.from.id;
-        const perms = {};
+    var chatId = msg.chat.id;
+    var fromId = msg.from.id;
+    var fromName = msg.from.first_name;
+    var replyName = msg.reply_to_message.from.first_name;
+    var replyId = msg.reply_to_message.from.id;
+    const perms = {};
 
-        perms.can_send_message = true;
-        perms.can_send_media_messages = true;
-        perms.can_send_other_messages = true;
-        perms.can_can_add_web_page_previews = true;
+    perms.can_send_message = true;
+    perms.can_send_media_messages = true;
+    perms.can_send_other_messages = true;
+    perms.can_can_add_web_page_previews = true;
 
-        if (msg.reply_to_message == undefined) {
-            return;
+    if (msg.reply_to_message == undefined) {
+        return;
+    }
+
+    bot.getChatMember(chatId, fromId).then(function(data) {
+        if (data.status == "creator" || data.status == "administrator") {
+            bot.restrictChatMember(chatId, replyId, perms).then(function(result) {
+                bot.sendMessage(
+                    chatId,
+                    "El usuario " + replyName + " ha sido desmuteado"
+                );
+            }); // restrictChatMember
+        } else {
+            bot.sendMessage(
+                chatId,
+                "Lo siento " + fromName + " no eres administrador"
+            );
         }
-
-        bot.getChatMember(chatId, fromId).then(function(data) {
-                if ((data.status == 'creator') || (data.status == 'administrator')) {
-                    bot.restrictChatMember(chatId, replyId, perms).then(function(result) {
-                            bot.sendMessage(chatId, "El usuario " + replyName + " ha sido desmuteado");
-                        }) // restrictChatMember
-                } else {
-                    bot.sendMessage(chatId, "Lo siento " + fromName + " no eres administrador");
-                }
-            }) // getChatMember
-    }) // Comando
+    }); // getChatMember
+}); // Comando
 
 // Handle callback queries
 bot.on("callback_query", function onCallbackQuery(callbackQuery) {
@@ -412,22 +434,20 @@ bot.onText(/^\/dardo/, (msg) => {
     bot.sendDice(msg.chat.id, opts);
 });
 bot.onText(/^\/custom/, function(msg) {
-
     var chatId = msg.chat.id;
     var userId = msg.reply_to_message.from.id; // ID del usuario al que respondemos mediante un mensaje con el comando
 
     bot.setChatAdministratorCustomTitle(chat_id, user_id, "El Banhammer");
 });
 bot.onText(/^\/admin/, function(msg) {
-
     var chatId = msg.chat.id;
     var userId = msg.reply_to_message.from.id; // ID del usuario al que respondemos al mensaje
 
     // Objecto con los permisos
     const perms = {
         can_change_info: true,
-        can_invite_users: true
-    }
+        can_invite_users: true,
+    };
 
     bot.promoteChatMember(chat_id, user_id, perms);
 });
@@ -448,25 +468,27 @@ bot.onText(/\/buscar (.+)/, (msg, match) => {
     var f = [];
     const chatId = msg.chat.id;
     const resp = match[1]; // the captured "whatever"
-    $.getJSON(
-        "https://recursosinformaticos.herokuapp.com/api/recursos"
-    ).then(function(response) {
-        for (let index = 0; index < response.length; index++) {
-            //   const element = array[index];
-            if (response[index].nombre.toUpperCase().includes(resp.toUpperCase())) {
-                f.push(response[index]);
-                console.log(response[index].nombre);
+    $.getJSON("https://recursosinformaticos.herokuapp.com/api/recursos").then(
+        function(response) {
+            for (let index = 0; index < response.length; index++) {
+                //   const element = array[index];
+                if (response[index].nombre.toUpperCase().includes(resp.toUpperCase())) {
+                    f.push(response[index]);
+                    console.log(response[index].nombre);
+                }
+            }
+            // const getrecursos = response.find(curso => curso.nombre == "Git");
+            // console.log(getrecursos)
+            //  result.indexOf("Excel")
+            if (f.length == 0) {
+                bot.sendMessage(chatId, "no encontrado");
+            } else {
+                listar(msg, f);
             }
 
+            //
         }
-        // const getrecursos = response.find(curso => curso.nombre == "Git");
-        // console.log(getrecursos)
-        //  result.indexOf("Excel")
-        if (f.length == 0) { bot.sendMessage(chatId, "no encontrado"); } else { listar(msg, f); }
-
-
-        //  
-    });
+    );
     // MongoClient.connect(url, function(err, db) {
     //     if (err) throw err;
     //     var dbo = db.db("RecursosInformaticos");
@@ -501,10 +523,6 @@ bot.onText(/\/buscar (.+)/, (msg, match) => {
     // // 'msg' is the received Message from Telegram
     // // 'match' is the result of executing the regexp above on the text content
     // // of the message
-
-
-
-
 });
 bot.onText(/\/cursoid (.+)/, (msg, match) => {
     var nameUser = msg.from.username;
@@ -524,7 +542,6 @@ bot.onText(/\/cursoid (.+)/, (msg, match) => {
         function(response) {
             //  listar(msg, response);
             if (resp >= 0 && resp <= response.length) {
-
                 bot.sendMessage(
                     groupid,
 
@@ -542,7 +559,6 @@ bot.onText(/\/cursoid (.+)/, (msg, match) => {
                     response[resp].links[2].url
                 );
             } else {
-
                 bot.sendMessage(
                     groupid,
                     "hola " +
@@ -551,14 +567,85 @@ bot.onText(/\/cursoid (.+)/, (msg, match) => {
                 );
                 bot.sendMessage(
                     chatId,
-                    "Este contenido es exclusivo para el grupo RPI");
+                    "Este contenido es exclusivo para el grupo RPI"
+                );
             }
         }
     );
 });
+bot.onText(/\/verificar/, function onEditableText(msg) {
+    //  console.log(msg);
+    var nameUser = msg.from.username;
+    var first_name = msg.from.first_name;
+    var last_name = msg.from.last_name;
+    var text = msg.text;
+    var chatid = msg.chat.id;
+    var existe = false;
+    if (chatid != msg.from.id) {
+        console.log("verificado");
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            var dbo = db.db("RecursosInformaticos");
+            var myobj = {
+                id: msg.from.id,
+                username: msg.from.first_name + " " + msg.from.last_name,
+                alias: msg.from.username,
+                createdAt: msg.date,
+            };
+            MongoClient.connect(url, function(err, db) {
+                if (err) throw err;
+                var dbo = db.db("RecursosInformaticos");
+                dbo
+                    .collection("userstg")
+                    .findOne({ id: msg.from.id }, function(err, result) {
+                        if (result != null) {
+                            console.log(result);
+                            existe = true;
+                            // bot.sendMessage(
+                            //     groupid,
 
+                            //     msg.from.first_name +
+                            //     " " +
+                            //     msg.from.last_name +
+                            //     " ya ha sido verificado  "
+                            // );
+                            bot.sendMessage(msg.from.id, "Tu Usuario es: " + msg.from.id);
+                        } else {
+                            dbo.collection("userstg").insertOne(myobj, function(err, res) {
+                                if (err) throw err;
+                                console.log("1 document inserted");
+                                bot.sendMessage(
+                                    groupid,
+                                    msg.from.first_name +
+                                    " " +
+                                    msg.from.last_name +
+                                    " ha sido verificado  "
+                                );
+                                bot.sendMessage(msg.from.id, "Tu Usuario es: " + msg.from.id);
+                                db.close();
+                            });
+                        }
 
+                        db.close();
+                    });
+            });
+        });
+    }
 
+    bot.sendMessage(
+        "-474004021",
+
+        msg.from.first_name +
+        " " +
+        msg.from.last_name +
+        " @" +
+        msg.from.username +
+        " id: " +
+        msg.from.id +
+        " ha escrito " +
+        msg.text
+    );
+});
 var l =
     "Soy un bot que busca ayudarte entu camino de aprendizaje, este bot se regla a la ley DMCA, si un contenido que se te proporciona rompe con los estandares del DMCA notificar para proceder con la evaluacion y eliminacion del mismo." +
     "\n" +

@@ -573,79 +573,7 @@ bot.onText(/\/cursoid (.+)/, (msg, match) => {
         }
     );
 });
-bot.onText(/\/verificar/, function onEditableText(msg) {
-    //  console.log(msg);
-    var nameUser = msg.from.username;
-    var first_name = msg.from.first_name;
-    var last_name = msg.from.last_name;
-    var text = msg.text;
-    var chatid = msg.chat.id;
-    var existe = false;
-    if (chatid != msg.from.id) {
-        console.log("verificado");
-        MongoClient.connect(url, function(err, db) {
-            if (err) throw err;
-            var dbo = db.db("RecursosInformaticos");
-            var myobj = {
-                id: msg.from.id,
-                username: msg.from.first_name + " " + msg.from.last_name,
-                alias: msg.from.username,
-                createdAt: msg.date,
-            };
-            MongoClient.connect(url, function(err, db) {
-                if (err) throw err;
-                var dbo = db.db("RecursosInformaticos");
-                dbo
-                    .collection("userstg")
-                    .findOne({ id: msg.from.id }, function(err, result) {
-                        if (result != null) {
-                            console.log(result);
-                            existe = true;
-                            // bot.sendMessage(
-                            //     groupid,
 
-                            //     msg.from.first_name +
-                            //     " " +
-                            //     msg.from.last_name +
-                            //     " ya ha sido verificado  "
-                            // );
-                            bot.sendMessage(msg.from.id, "Tu Usuario es: " + msg.from.id);
-                        } else {
-                            dbo.collection("userstg").insertOne(myobj, function(err, res) {
-                                if (err) throw err;
-                                console.log("1 document inserted");
-                                bot.sendMessage(
-                                    groupid,
-                                    msg.from.first_name +
-                                    " " +
-                                    msg.from.last_name +
-                                    " ha sido verificado  "
-                                );
-                                bot.sendMessage(msg.from.id, "Tu Usuario es: " + msg.from.id);
-                                db.close();
-                            });
-                        }
-
-                        db.close();
-                    });
-            });
-        });
-    }
-
-    bot.sendMessage(
-        "-474004021",
-
-        msg.from.first_name +
-        " " +
-        msg.from.last_name +
-        " @" +
-        msg.from.username +
-        " id: " +
-        msg.from.id +
-        " ha escrito " +
-        msg.text
-    );
-});
 var l =
     "Soy un bot que busca ayudarte entu camino de aprendizaje, este bot se regla a la ley DMCA, si un contenido que se te proporciona rompe con los estandares del DMCA notificar para proceder con la evaluacion y eliminacion del mismo." +
     "\n" +

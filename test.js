@@ -1,300 +1,51 @@
-const groupid = "1203528828";
 const TelegramBot = require("node-telegram-bot-api");
 const token = "1482047845:AAHUxw4Xt1SjwXdTv5hp4_0lMCArAkrHuOY";
+const imgur = require("imgur-node-api");
+
 const bot = new TelegramBot(token, { polling: true });
-const axios = require("axios");
+bot.onText(/^\/imgur/, function(msg) {
+    // Recogemos el chatId donde se realiza la petición-
+    var chatId = msg.chat.id;
 
-bot.onText(/\/buscar (.+)/, function onEchoText(msg, match) {
-    const resp = match[1];
-    //  asyncCall(msg);
-    traercursos(msg, resp);
+    /*
+          Obligamos de alguna manera a que el usuario tenga que responder a una imagen que previamente haya sido enviada
+          para poder obtener los datos que necesitamos para obtener el enlace de los servidores de Telegram.
+          */
 
-});
-// (async() => {
-//     try {
-//         const response = await axios.get(
-//             "https://recursosinformaticos.herokuapp.com/api/recursos"
-//         );
-//         console.log(response.data.length);
-//         //console.log(response.data.explanation);
-//     } catch (error) {
-//         console.log(error.response.body);
-//     }
-// })();
+    // Le indicamos que si no respondemos a la imagen, no haga nada.
+    if (msg.reply_to_message == undefined) {
+        return;
+    }
+    console.log(msg);
+    /*
+              Visualizando el contenido mediante console.log(msg), se puede observar los parámetros de la imagen. 
+              Habitualmente suele devolver un Array con 3 resultados. 
+              Como recomendación, deja marcada por defecto la posición [2] del array, 
+              principalmente por la calidad de la imagen.
+              */
 
-function resolveAfter2Seconds() {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve("resolved");
-        }, 2000);
-    });
-}
+    var photo = msg.reply_to_message.photo[0].file_id;
+    // Con esto obtendríamos el id del archivo de los servidores de Telegram.
 
-async function asyncCall(r) {
-    console.log("calling");
-    const result = await resolveAfter2Seconds();
-    bot.sendMessage(r.from.id, result);
-    console.log(result);
-    // expected output: "resolved"
-}
-f = [];
-async function traercursos(mensaje, termino) {
-    bot.sendMessage("1203528828", "Buscando... " + termino);
-    const response = await axios.get(
-        "https://recursosinformaticos.herokuapp.com/api/recursos"
-    );
-    listar(response, termino);
-    // 
-
-
-    // const getrecursos = response.find(curso => curso.nombre == "Git");
-    // console.log(getrecursos)
-    //  result.indexOf("Excel")
-    // if (f.length == 0) {
-    //     // bot.sendMessage("1203528828", "no encontrado");
-    // } else {
-    //     listar(msg, f);
-    // }
-    //bot.sendMessage(r.from.id, result);
-    // console.log(result);
-    // expected output: "resolved"
-}
-
-function listar(response, termino) {
-    arr = response.data;
-    busquedad = [];
-    for (let index = 0; index < arr.length; index++) {
+    bot.getFileLink(photo).then(function(enlace) {
+        // "enlace", devuelve la url de la imagen subida en Telegram
+        console.log(enlace);
         //
-        if (arr[index].nombre.includes("Curso")) {
+        var clientId = "1b54fecc7e593b7";
 
-            console.log(arr[index].nombre);
+        // Establecemos el cliente y procedemos a la subida
 
-        }
-        //   const element = array[index];
-        // if (arr[index].nombre.toUpperCase().includes(termino.toUpperCase())) {
-        //     //  busquedad.push(arr[index]);
-        //     //     arr.push(response.data[index]);
-        //     //     //  bot.sendMessage("1203528828", response.data[index].nombre);
+        imgur.setClientID(clientId);
 
-        //     //     //
-        //     //     //
-        // }
-    }
-    bot.sendMessage("1203528828", "busquedad[0].nombre");
-    //console.log(arr);
-}
-bot.on("callback_query", function onCallbackQuery(callbackQuery) {
-    const action = callbackQuery.data;
-    const msg = callbackQuery.message;
-    const opts = {
-        chat_id: msg.chat.id,
-        message_id: msg.message_id,
-        reply_markup: {
-            inline_keyboard: [
-                [{
-                        text: "Anterior",
-                        // we shall check for this value when we listen
-                        // for "callback_query"
-                        callback_data: "prev",
-                    },
-                    {
-                        text: "Siguiente",
-                        // we shall check for this value when we listen
-                        // for "callback_query"
-                        callback_data: "next",
-                    },
-                ],
-            ],
-        },
-    };
-    const opts2 = {
-        chat_id: msg.chat.id,
-        message_id: msg.message_id,
-        reply_markup: {
-            inline_keyboard: [
-                [{
-                    text: "Inicio",
-                    // we shall check for this value when we listen
-                    // for "callback_query"
-                    callback_data: "ini",
-                }, ],
-            ],
-        },
-    };
-    const opts3 = {
-        chat_id: msg.chat.id,
-        message_id: msg.message_id,
-        reply_markup: {
-            inline_keyboard: [
-                [{
-                    text: "Siguiente",
-                    // we shall check for this value when we listen
-                    // for "callback_query"
-                    callback_data: "next",
-                }, ],
-            ],
-        },
-    };
-    let text;
-    var a = f.length;
-    if (a >= 2) {
-        a = a - 2;
-    }
-    if (action === "next") {
-        if (n <= a) {
-            n++;
-            text =
-                f[n].nombre +
-                "\n" +
-                f[n].imagen +
-                "\n" +
-                "Telegram:" +
-                f[n].links[0].url +
-                "\n" +
-                "Mega:" +
-                f[n].links[1].url +
-                "\n" +
-                "Google Drive:" +
-                f[n].links[2].url;
-            bot.editMessageText(text, opts);
-        } else {
-            text =
-                f[n].nombre +
-                "\n" +
-                f[n].imagen +
-                "\n" +
-                "Telegram:" +
-                f[n].links[0].url +
-                "\n" +
-                "Mega:" +
-                f[n].links[1].url +
-                "\n" +
-                "Google Drive:" +
-                f[n].links[2].url;
-            bot.editMessageText(text, opts2);
-        }
-    }
+        // Pasamos como parametro "enlace"
 
-    if (action === "prev") {
-        if (n >= 1) {
-            n--;
-            text =
-                f[n].nombre +
-                "\n" +
-                f[n].imagen +
-                "\n" +
-                "Telegram:" +
-                f[n].links[0].url +
-                "\n" +
-                "Mega:" +
-                f[n].links[1].url +
-                "\n" +
-                "Google Drive:" +
-                f[n].links[2].url;
-            bot.editMessageText(text, opts);
-        } else {
-            text =
-                "Curso Inicial  " +
-                f[n].nombre +
-                "\n" +
-                f[n].imagen +
-                "\n" +
-                "Telegram:" +
-                f[n].links[0].url +
-                "\n" +
-                "Mega:" +
-                f[n].links[1].url +
-                "\n" +
-                "Google Drive:" +
-                f[n].links[2].url;
-            bot.editMessageText(text, opts3);
-        }
-    }
-    if (action === "page") {
-        n++;
-        text =
-            f[n].nombre +
-            "\n" +
-            f[n].imagen +
-            "\n" +
-            "Telegram:" +
-            f[n].links[0].url +
-            "\n" +
-            "Mega:" +
-            f[n].links[1].url +
-            "\n" +
-            "Google Drive:" +
-            f[n].links[2].url;
-        bot.editMessageText(text, opts);
-    }
-    if (action === "ini") {
-        n = 0;
-        text =
-            f[n].nombre +
-            "\n" +
-            f[n].imagen +
-            "\n" +
-            "Telegram:" +
-            f[n].links[0].url +
-            "\n" +
-            "Mega:" +
-            f[n].links[1].url +
-            "\n" +
-            "Google Drive:" +
-            f[n].links[2].url;
-        bot.editMessageText(text, opts3);
-    }
+        imgur.upload(enlace, function(err, res) {
+            // "res.data.link" devuelve la url de la imagen ya subida a Telegram
+            console.log(res.data.link);
+            var link = res.data.link;
+
+            // Y por último, enviaremos el enlace en un mensaje
+            bot.sendMessage(chatId, "Enlace de la imagen subida a Imgur: \n" + link);
+        });
+    });
 });
-
-function listr(msg, arr) {
-    n = 0;
-    f = arr;
-    const opts = {
-        reply_markup: {
-            inline_keyboard: [
-                [{
-                    text: "Siguiente",
-                    // we shall check for this value when we listen
-                    // for "callback_query"
-                    callback_data: "page",
-                }, ],
-            ],
-        },
-    };
-    if (f.length == 1) {
-        bot.sendMessage(
-            groupid,
-            "Curso " +
-            arr[n].nombre +
-            "\n" +
-            arr[n].imagen +
-            "\n" +
-            "Telegram:" +
-            arr[n].links[0].url +
-            "\n" +
-            "Mega:" +
-            arr[n].links[1].url +
-            "\n" +
-            "Google Drive:" +
-            arr[n].links[2].url
-        );
-    } else {
-        bot.sendMessage(
-            groupid,
-            "Curso " +
-            arr[n].nombre +
-            "\n" +
-            arr[n].imagen +
-            "\n" +
-            "Telegram:" +
-            arr[n].links[0].url +
-            "\n" +
-            "Mega:" +
-            arr[n].links[1].url +
-            "\n" +
-            "Google Drive:" +
-            arr[n].links[2].url,
-            opts
-        );
-    }
-}

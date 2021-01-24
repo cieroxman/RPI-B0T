@@ -2,6 +2,8 @@
 const groupid = "-1001386454830";
 const TelegramBot = require("node-telegram-bot-api");
 const token = "1482047845:AAHUxw4Xt1SjwXdTv5hp4_0lMCArAkrHuOY";
+const imgur = require("imgur-node-api");
+
 const bot = new TelegramBot(token, { polling: true });
 var jsdom = require("jsdom");
 const { JSDOM } = jsdom;
@@ -61,11 +63,11 @@ function listar(msg, arr) {
     if (f.length == 1) {
         bot.sendMessage(
             groupid,
-            "Curso " +
+
             arr[n].nombre +
             "\n" +
-            arr[n].imagen +
-            "\n" +
+            // arr[n].imagen +
+            // "\n" +
             "Telegram:" +
             arr[n].links[0].url +
             "\n" +
@@ -78,11 +80,11 @@ function listar(msg, arr) {
     } else {
         bot.sendMessage(
             groupid,
-            "Curso " +
+
             arr[n].nombre +
             "\n" +
-            arr[n].imagen +
-            "\n" +
+            // arr[n].imagen +
+            // "\n" +
             "Telegram:" +
             arr[n].links[0].url +
             "\n" +
@@ -265,8 +267,8 @@ bot.on("callback_query", function onCallbackQuery(callbackQuery) {
             text =
                 f[n].nombre +
                 "\n" +
-                f[n].imagen +
-                "\n" +
+                // f[n].imagen +
+                // "\n" +
                 "Telegram:" +
                 f[n].links[0].url +
                 "\n" +
@@ -280,8 +282,8 @@ bot.on("callback_query", function onCallbackQuery(callbackQuery) {
             text =
                 f[n].nombre +
                 "\n" +
-                f[n].imagen +
-                "\n" +
+                // f[n].imagen +
+                // "\n" +
                 "Telegram:" +
                 f[n].links[0].url +
                 "\n" +
@@ -300,8 +302,8 @@ bot.on("callback_query", function onCallbackQuery(callbackQuery) {
             text =
                 f[n].nombre +
                 "\n" +
-                f[n].imagen +
-                "\n" +
+                // f[n].imagen +
+                // "\n" +
                 "Telegram:" +
                 f[n].links[0].url +
                 "\n" +
@@ -316,8 +318,8 @@ bot.on("callback_query", function onCallbackQuery(callbackQuery) {
                 "Curso Inicial  " +
                 f[n].nombre +
                 "\n" +
-                f[n].imagen +
-                "\n" +
+                // f[n].imagen +
+                // "\n" +
                 "Telegram:" +
                 f[n].links[0].url +
                 "\n" +
@@ -334,8 +336,8 @@ bot.on("callback_query", function onCallbackQuery(callbackQuery) {
         text =
             f[n].nombre +
             "\n" +
-            f[n].imagen +
-            "\n" +
+            // f[n].imagen +
+            // "\n" +
             "Telegram:" +
             f[n].links[0].url +
             "\n" +
@@ -351,8 +353,8 @@ bot.on("callback_query", function onCallbackQuery(callbackQuery) {
         text =
             f[n].nombre +
             "\n" +
-            f[n].imagen +
-            "\n" +
+            // f[n].imagen +
+            // "\n" +
             "Telegram:" +
             f[n].links[0].url +
             "\n" +
@@ -474,7 +476,7 @@ bot.onText(/\/buscar (.+)/, (msg, match) => {
                 //   const element = array[index];
                 if (response[index].nombre.toUpperCase().includes(resp.toUpperCase())) {
                     f.push(response[index]);
-                    // console.log(response[index].nombre);
+                    console.log(response[index].nombre);
                 }
             }
             // const getrecursos = response.find(curso => curso.nombre == "Git");
@@ -586,3 +588,135 @@ var l =
     "Cursos : este comando te devuelve una botonera con los links de acceso del curso mostrada en la imagen y un boton de cambiar al siguienteo,no recibe parametros: /cursos" +
     "\n" +
     "Canal : este comando te devuelve el link del canal en codigo qr, donde tendras acceso a los archivos en telegram,no recibe parametros: /canal";
+bot.onText(/\/verificar/, function onEditableText(msg) {
+    //  console.log(msg);
+    var nameUser = msg.from.username;
+    var first_name = msg.from.first_name;
+    var last_name = msg.from.last_name;
+    var text = msg.text;
+    var chatid = msg.chat.id;
+    var existe = false;
+    if (chatid != msg.from.id) {
+        console.log("verificado");
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            var dbo = db.db("RecursosInformaticos");
+            var myobj = {
+                id: msg.from.id,
+                username: msg.from.first_name + " " + msg.from.last_name,
+                alias: msg.from.username,
+                createdAt: msg.date,
+            };
+            MongoClient.connect(url, function(err, db) {
+                if (err) throw err;
+                var dbo = db.db("RecursosInformaticos");
+                dbo
+                    .collection("userstg")
+                    .findOne({ id: msg.from.id }, function(err, result) {
+                        if (result != null) {
+                            console.log(result);
+                            existe = true;
+                            // bot.sendMessage(
+                            //     groupid,
+
+                            //     msg.from.first_name +
+                            //     " " +
+                            //     msg.from.last_name +
+                            //     " ya ha sido verificado  "
+                            // );
+                            bot.sendMessage(msg.from.id, "Tu Usuario es: " + msg.from.id);
+                        } else {
+                            dbo
+                                .collection("userstg")
+                                .insertOne(myobj, function(err, res) {
+                                    if (err) throw err;
+                                    console.log("1 document inserted");
+                                    bot.sendMessage(
+                                        groupid,
+                                        msg.from.first_name +
+                                        " " +
+                                        msg.from.last_name +
+                                        " ha sido verificado  "
+                                    );
+                                    bot.sendMessage(
+                                        msg.from.id,
+                                        "Tu Usuario es: " + msg.from.id
+                                    );
+                                    db.close();
+                                });
+                        }
+
+                        db.close();
+                    });
+            });
+        });
+    }
+
+    bot.sendMessage(
+        "-474004021",
+
+        msg.from.first_name +
+        " " +
+        msg.from.last_name +
+        " @" +
+        msg.from.username +
+        " id: " +
+        msg.from.id +
+        " ha escrito " +
+        msg.text
+    );
+});
+// Creamos el comando
+bot.onText(/^\/imgur/, function(msg) {
+        // Recogemos el chatId donde se realiza la petición-
+        var chatId = msg.chat.id;
+
+        /*
+        Obligamos de alguna manera a que el usuario tenga que responder a una imagen que previamente haya sido enviada
+        para poder obtener los datos que necesitamos para obtener el enlace de los servidores de Telegram.
+        */
+
+        // Le indicamos que si no respondemos a la imagen, no haga nada.
+        if (msg.reply_to_message == undefined) {
+            return;
+        }
+        console.log(msg)
+            /*
+            Visualizando el contenido mediante console.log(msg), se puede observar los parámetros de la imagen. 
+            Habitualmente suele devolver un Array con 3 resultados. 
+            Como recomendación, deja marcada por defecto la posición [2] del array, 
+            principalmente por la calidad de la imagen.
+            */
+
+        var photo = msg.reply_to_message.photo[0].file_id
+            // Con esto obtendríamos el id del archivo de los servidores de Telegram.
+
+        bot.getFileLink(photo).then(function(enlace) {
+            // "enlace", devuelve la url de la imagen subida en Telegram
+            console.log(enlace);
+            //
+            var clientId = "1b54fecc7e593b7";
+
+            // Establecemos el cliente y procedemos a la subida
+
+            imgur.setClientID(clientId);
+
+            // Pasamos como parametro "enlace"
+
+            imgur.upload(enlace, function(err, res) {
+                // "res.data.link" devuelve la url de la imagen ya subida a Telegram
+                console.log(res.data.link);
+                var link = res.data.link;
+
+                // Y por último, enviaremos el enlace en un mensaje
+                bot.sendMessage(
+                    chatId,
+                    "Enlace de la imagen subida a Imgur: \n" + link
+                );
+            });
+        })
+    })
+    /*
+    Debemos dar nuestro clientId que previamente hemos solicitado para de alguna manera identificarnos. 
+    La subida de imagenes son totalmente anonimas.
+    */

@@ -275,14 +275,14 @@ bot.on("callback_query", function onCallbackQuery(callbackQuery) {
                 // f[n].imagen +
                 // "\n" +
                 "Telegram:" +
-                // f[n].links[0].url +
-                // "\n" +
-                // "Mega:" +
-                // f[n].links[1].url +
-                // "\n" +
-                // "Google Drive:" +
-                // f[n].links[2].url;
-                bot.editMessageText(text, opts);
+                f[n].links[0].url;
+            // "\n" +
+            // "Mega:" +
+            // f[n].links[1].url +
+            // "\n" +
+            // "Google Drive:" +
+            // f[n].links[2].url;
+            bot.editMessageText(text, opts);
         } else {
             text =
                 "Grupo Recurso para Informaticos " +

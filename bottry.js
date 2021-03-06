@@ -12,7 +12,7 @@ const { document } = new JSDOM("").window;
 global.document = document;
 var MongoClient = require("mongodb").MongoClient;
 var url =
-    "mongodb+srv://admin:superadmin@cluster0.av7ui.mongodb.net/RecursosInformaticos?retryWrites=true&w=majority";
+    "mongodb+srv://admin:superadmin@cluster0.av7ui.mongodb.net/RecursosInformaticos2?retryWrites=true&w=majority";
 var $ = (jQuery = require("jquery")(window));
 bot.on("polling_error", function(error) {
     console.log(error);
@@ -38,7 +38,7 @@ bot.onText(/\/cursos/, function onEditableText(msg) {
         " uso el bot con el comando /cursos"
     );
     var b = ["i", "ii", "ii"];
-    $.getJSON("https://recursosinformaticos.herokuapp.com/api/recursos").then(
+    $.getJSON("https://recursosinformaticos2.herokuapp.com/api/recursos").then(
         function(response) {
             listar(msg, response);
         }
@@ -399,7 +399,7 @@ bot.onText(/^\/cantidad/, function(msg) {
 
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
-        var dbo = db.db("RecursosInformaticos");
+        var dbo = db.db("RecursosInformaticos2");
         dbo
             .collection("recursos")
             .find({})
@@ -470,7 +470,7 @@ bot.onText(/\/buscar (.+)/, (msg, match) => {
     var f = [];
     const chatId = msg.chat.id;
     const resp = match[1]; // the captured "whatever"
-    $.getJSON("https://recursosinformaticos.herokuapp.com/api/recursos").then(
+    $.getJSON("https://recursosinformaticos2.herokuapp.com/api/recursos").then(
         function(response) {
             for (let index = 0; index <= response.length - 2; index++) {
                 //   const element = array[index];
@@ -540,7 +540,7 @@ bot.onText(/\/cursoid (.+)/, (msg, match) => {
     const chatId = msg.chat.id;
     const resp = match[1]; // the captured "whatever"
     //console.log(msg.chat);
-    $.getJSON("https://recursosinformaticos.herokuapp.com/api/recursos").then(
+    $.getJSON("https://recursosinformaticos2.herokuapp.com/api/recursos").then(
         function(response) {
             //  listar(msg, response);
             if (resp >= 0 && resp <= response.length) {
@@ -600,7 +600,7 @@ bot.onText(/\/verificar/, function onEditableText(msg) {
         console.log("verificado");
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
-            var dbo = db.db("RecursosInformaticos");
+            var dbo = db.db("RecursosInformaticos2");
             var myobj = {
                 id: msg.from.id,
                 username: msg.from.first_name + " " + msg.from.last_name,
@@ -609,7 +609,7 @@ bot.onText(/\/verificar/, function onEditableText(msg) {
             };
             MongoClient.connect(url, function(err, db) {
                 if (err) throw err;
-                var dbo = db.db("RecursosInformaticos");
+                var dbo = db.db("RecursosInformaticos2");
                 dbo
                     .collection("userstg")
                     .findOne({ id: msg.from.id }, function(err, result) {

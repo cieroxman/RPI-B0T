@@ -272,17 +272,17 @@ bot.on("callback_query", function onCallbackQuery(callbackQuery) {
             text =
                 f[n].nombre +
                 "\n" +
-                // f[n].imagen +
-                // "\n" +
+                f[n].imagen +
+                "\n" +
                 "Telegram:" +
-                f[n].links[0].url;
-            // "\n" +
-            // "Mega:" +
-            // f[n].links[1].url +
-            // "\n" +
-            // "Google Drive:" +
-            // f[n].links[2].url;
-            bot.editMessageText(text, opts);
+                f[n].links[0].url,
+                // "\n" +
+                // "Mega:" +
+                // f[n].links[1].url +
+                // "\n" +
+                // "Google Drive:" +
+                // f[n].links[2].url;
+                bot.editMessageText(text, opts);
         } else {
             text =
                 "Grupo Recurso para Informaticos " +
@@ -292,7 +292,7 @@ bot.on("callback_query", function onCallbackQuery(callbackQuery) {
                 arr[n].imagen +
                 "\n" +
                 "Telegram:" +
-                f[n].links[0].url
+                f[n].links[0].url,
                 //    +
                 //   "\n" +
                 //   "Mega:" +
@@ -300,8 +300,8 @@ bot.on("callback_query", function onCallbackQuery(callbackQuery) {
                 //   "\n" +
                 //   "Google Drive:" +
                 //   f[n].links[2].url
-            ;
-            bot.editMessageText(text, opts2);
+
+                bot.editMessageText(text, opts2);
         }
     }
 
@@ -324,8 +324,8 @@ bot.on("callback_query", function onCallbackQuery(callbackQuery) {
                 //   "\n" +
                 //   "Google Drive:" +
                 //   f[n].links[2].url
-            ;
-            bot.editMessageText(text, opts);
+                ,
+                bot.editMessageText(text, opts);
         } else {
             text =
                 "Grupo Recurso para Informaticos " +
@@ -346,8 +346,8 @@ bot.on("callback_query", function onCallbackQuery(callbackQuery) {
                 //   "\n" +
                 //   "Google Drive:" +
                 //   f[n].links[2].url
-            ;
-            bot.editMessageText(text, opts3);
+                ,
+                bot.editMessageText(text, opts3);
         }
     }
     if (action === "page") {
@@ -371,8 +371,8 @@ bot.on("callback_query", function onCallbackQuery(callbackQuery) {
             //   "\n" +
             //   "Google Drive:" +
             //   f[n].links[2].url
-        ;
-        bot.editMessageText(text, opts);
+            ,
+            bot.editMessageText(text, opts);
     }
     if (action === "ini") {
         n = 0;
@@ -395,8 +395,8 @@ bot.on("callback_query", function onCallbackQuery(callbackQuery) {
             //   "\n" +
             //   "Google Drive:" +
             //   f[n].links[2].url
-        ;
-        bot.editMessageText(text, opts3);
+            ,
+            bot.editMessageText(text, opts3);
     }
 });
 bot.onText(/^\/getid/, function(msg) {

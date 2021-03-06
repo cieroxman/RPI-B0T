@@ -63,36 +63,39 @@ function listar(msg, arr) {
     if (f.length == 1) {
         bot.sendMessage(
             groupid,
-
+            "Grupo Recurso para Informaticos " +
             arr[n].nombre +
             "\n" +
-            // arr[n].imagen +
-            // "\n" +
+            arr[n].imagen +
+            "\n" +
             "Telegram:" +
-            arr[n].links[0].url +
-            "\n" +
-            "Mega:" +
-            arr[n].links[1].url +
-            "\n" +
-            "Google Drive:" +
-            arr[n].links[2].url
+            arr[n].links[0].url
+            // +
+            // "\n" +
+            // "Mega:" +
+            // arr[n].links[1].url +
+            // "\n" +
+            // "Google Drive:" +
+            // arr[n].links[2].url
         );
     } else {
         bot.sendMessage(
             groupid,
-
+            "Grupo Recurso para Informaticos " +
             arr[n].nombre +
             "\n" +
-            // arr[n].imagen +
-            // "\n" +
+            arr[n].imagen +
+            "\n" +
             "Telegram:" +
             arr[n].links[0].url +
-            "\n" +
-            "Mega:" +
-            arr[n].links[1].url +
-            "\n" +
-            "Google Drive:" +
-            arr[n].links[2].url,
+            // +
+            // "\n" +
+            // "Mega:" +
+            // arr[n].links[1].url +
+            // "\n" +
+            // "Google Drive:" +
+            // arr[n].links[2].url,
+
             opts
         );
     }

@@ -309,18 +309,22 @@ bot.on("callback_query", function onCallbackQuery(callbackQuery) {
         if (n >= 1) {
             n--;
             text =
-                f[n].nombre +
+                "Grupo Recurso para Informaticos " +
                 "\n" +
-                // f[n].imagen +
-                // "\n" +
+                arr[n].nombre +
+                "\n" +
+                arr[n].imagen +
+                "\n" +
                 "Telegram:" +
-                f[n].links[0].url +
-                "\n" +
-                "Mega:" +
-                f[n].links[1].url +
-                "\n" +
-                "Google Drive:" +
-                f[n].links[2].url;
+                f[n].links[0].url
+                //+
+                //   "\n" +
+                //   "Mega:" +
+                //   f[n].links[1].url +
+                //   "\n" +
+                //   "Google Drive:" +
+                //   f[n].links[2].url
+            ;
             bot.editMessageText(text, opts);
         } else {
             text =

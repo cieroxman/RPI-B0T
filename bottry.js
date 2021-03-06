@@ -64,6 +64,7 @@ function listar(msg, arr) {
         bot.sendMessage(
             groupid,
             "Grupo Recurso para Informaticos " +
+            "\n" +
             arr[n].nombre +
             "\n" +
             arr[n].imagen +
@@ -82,12 +83,13 @@ function listar(msg, arr) {
         bot.sendMessage(
             groupid,
             "Grupo Recurso para Informaticos " +
+            "\n" +
             arr[n].nombre +
             "\n" +
             arr[n].imagen +
             "\n" +
             "Telegram:" +
-            arr[n].links[0].url +
+            arr[n].links[0].url,
             // +
             // "\n" +
             // "Mega:" +

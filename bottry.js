@@ -328,54 +328,74 @@ bot.on("callback_query", function onCallbackQuery(callbackQuery) {
             bot.editMessageText(text, opts);
         } else {
             text =
+                "Grupo Recurso para Informaticos " +
+                "\n" +
                 "Curso Inicial  " +
-                f[n].nombre +
+                arr[n].nombre +
+                "\n" +
+                arr[n].imagen +
                 "\n" +
                 // f[n].imagen +
                 // "\n" +
                 "Telegram:" +
-                f[n].links[0].url +
-                "\n" +
-                "Mega:" +
-                f[n].links[1].url +
-                "\n" +
-                "Google Drive:" +
-                f[n].links[2].url;
+                f[n].links[0].url
+                //+
+                //   "\n" +
+                //   "Mega:" +
+                //   f[n].links[1].url +
+                //   "\n" +
+                //   "Google Drive:" +
+                //   f[n].links[2].url
+            ;
             bot.editMessageText(text, opts3);
         }
     }
     if (action === "page") {
         n++;
         text =
-            f[n].nombre +
+            "Grupo Recurso para Informaticos " +
             "\n" +
+            arr[n].nombre +
+            "\n" +
+            arr[n].imagen +
+            "\n" +
+
             // f[n].imagen +
             // "\n" +
             "Telegram:" +
             f[n].links[0].url +
-            "\n" +
-            "Mega:" +
-            f[n].links[1].url +
-            "\n" +
-            "Google Drive:" +
-            f[n].links[2].url;
+            "\n"
+            //   +
+            //   "Mega:" +
+            //   f[n].links[1].url +
+            //   "\n" +
+            //   "Google Drive:" +
+            //   f[n].links[2].url
+        ;
         bot.editMessageText(text, opts);
     }
     if (action === "ini") {
         n = 0;
         text =
-            f[n].nombre +
+            "Grupo Recurso para Informaticos " +
             "\n" +
+            arr[n].nombre +
+            "\n" +
+            arr[n].imagen +
+            "\n" +
+
             // f[n].imagen +
             // "\n" +
             "Telegram:" +
             f[n].links[0].url +
-            "\n" +
-            "Mega:" +
-            f[n].links[1].url +
-            "\n" +
-            "Google Drive:" +
-            f[n].links[2].url;
+            "\n"
+            //   +
+            //   "Mega:" +
+            //   f[n].links[1].url +
+            //   "\n" +
+            //   "Google Drive:" +
+            //   f[n].links[2].url
+        ;
         bot.editMessageText(text, opts3);
     }
 });
@@ -559,19 +579,24 @@ bot.onText(/\/cursoid (.+)/, (msg, match) => {
             if (resp >= 0 && resp <= response.length) {
                 bot.sendMessage(
                     groupid,
-
-                    response[resp].nombre +
+                    "Grupo Recurso para Informaticos " +
                     "\n" +
-                    response[resp].imagen +
+                    arr[n].nombre +
                     "\n" +
+                    arr[n].imagen +
+                    "\n" +
+                    // response[resp].nombre +
+                    // "\n" +
+                    // response[resp].imagen +
+                    // "\n" +
                     "Telegram:" +
-                    response[resp].links[0].url +
-                    "\n" +
-                    "Mega:" +
-                    response[resp].links[1].url +
-                    "\n" +
-                    "Google Drive:" +
-                    response[resp].links[2].url
+                    response[resp].links[0].url
+                    // "\n" +
+                    // "Mega:" +
+                    // response[resp].links[1].url +
+                    // "\n" +
+                    // "Google Drive:" +
+                    // response[resp].links[2].url
                 );
             } else {
                 bot.sendMessage(

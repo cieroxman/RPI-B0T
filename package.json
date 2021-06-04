@@ -2,9 +2,9 @@
     "name": "CurVipBot",
     "version": "1.0.0",
     "description": "",
-    "main": "index.js",
+    "main": "bottry2.js",
     "scripts": {
-        "start": "node bottry.js",
+        "start": "node bottry2.js",
         "test": "echo \"Error: no test specified\" && exit 1",
         "dev": "nodemon bottry.js"
     },
